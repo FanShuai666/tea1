@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace 要和接口名字保持一致 -->
+<mapper namespace="com.zhiyou100.dao.TeaDao">
+	<insert id="saveTea" parameterType="tea">
+		INSERT INTO tea VALUES (#{shape}, #{colour}, #{neatness}, #{matching},
+		#{fragrance}, #{taste}, #{leaf}, #{grade}, null, null)
+	</insert>
+
+	<select id="listTea" parameterType="com.zhiyou100.vo.PageVO"
+		resultType="tea">
+		SELECT id, shape, colour, neatness, matching, fragrance, taste, leaf,
+		grade, add_time
+		from tea ORDER BY
+		<if test="sortType == 0">
+			grade
+		</if>
+		<if test="sortType == 1">
+			grade DESC
+		</if>
+		<if test="sortType == 2">
+			add_time
+		</if>
+		<if test="sortType == 3">
+			add_time DESC
+		</if>
+		limit #{pageIndex},#{pageSize}
+	</select>
+
+	<select id="getTea" resultType="tea">
+		SELECT * FROM tea where id = #{id}
+	</select>
+
+	<select id="getCountByGrade" resultType="int">
+		SELECT COUNT(id) FROM tea where grade=#{grade}
+	</select>
+
+	<select id="listCount" resultType="int">
+		SELECT COUNT(id) FROM tea
+	</select>
+</mapper>
